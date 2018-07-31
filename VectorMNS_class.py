@@ -59,8 +59,8 @@ class Vector(object):
 
     # Gauss Jordan Function
     @staticmethod
-    def Gauss_Jordan(vecList, dim, c):
-        if dim <= 0:
+    def Gauss_Jordan(vecList, dimension, constants):
+        if dimension <= 0:
             return None
         # making Row echelon form
         # For loop is based on height
@@ -73,8 +73,6 @@ class Vector(object):
                 if vecList[y][i] != 0:
                     found = 1
                     index = y
-                    if y in ListDone:
-                        found = 0
                 if found == 1:
                     break
             # make the non-zero term "1"
@@ -83,19 +81,18 @@ class Vector(object):
                 Divide = vecList[index][i]
                 for y in range(len(vecList[index])):
                     vecList[index][y] = vecList[index][y] / Divide
-                c[index] = c[index] / Divide
+                constants[index] = constants[index] / Divide
                 ListDone.append(index)
                 # scale and reduce
-                for y in range(len(vector)):
+                for y in range(len(vecList)):
                     # skip the zero term and the one being used to minus
                     if vecList[y][i] != 0 and y not in ListDone:
                         Scale = vecList[y][i]
                         for z in range(len(vecList[y])):
                             vecList[y][z] = (vecList[index][z] * Scale) - vecList[y][z]
-                        c[y] = (c[index] * Scale) - c[y]
+                        constants[y] = (constants[index] * Scale) - constants[y]
         # End of row echelon form
         for i in range(len(vecList) - 1, 0, -1):
-            print(i)
             found = 0
             for y in range(len(vecList) - 1, 0, -1):
                 if vecList[y][i] == 1:
@@ -110,13 +107,12 @@ class Vector(object):
                     if vecList[y][i] != 0 and y != index:
                         Scale = vecList[y][i]
                         vecList[y][i] = 0
-                        c[y] = Scale - c[y]
+                        constants[y] = Scale - constants[y]
         # check if there is all zero value
         for y in range(len(vecList)):
             if 1 not in vecList[y]:
                 return None
-        print(c)
-        return c
+        return constants
 
     @staticmethod
     def span(vecList, dim):
